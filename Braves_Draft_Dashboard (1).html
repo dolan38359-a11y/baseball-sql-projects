@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlanta Braves 2026 Draft Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #003366 0%, #1a4d7a 100%);
+            color: #333;
+            padding: 10px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #003366 0%, #00A3E0 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 6px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .budget-variance {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .variance-item {
+            background: rgba(255,255,255,0.15);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .variance-label {
+            font-size: 10px;
+            opacity: 0.9;
+        }
+        
+        .variance-value {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .variance-positive {
+            color: #90EE90;
+        }
+        
+        .variance-negative {
+            color: #FFB6C1;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (max-width: 1200px) {
+            .content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+        
+        .section h2 {
+            color: #003366;
+            font-size: 15px;
+            margin-bottom: 12px;
+            border-bottom: 3px solid #00A3E0;
+            padding-bottom: 8px;
+        }
+        
+        .pick-box {
+            background: white;
+            border-left: 5px solid #00A3E0;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .pick-title {
+            font-weight: bold;
+            color: #003366;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        
+        .budget-bar {
+            background: #ddd;
+            height: 20px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+            position: relative;
+        }
+        
+        .budget-used {
+            height: 100%;
+            background: linear-gradient(90deg, #00A3E0 0%, #0085B3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .budget-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+        
+        .budget-item {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        
+        .budget-item label {
+            color: #666;
+            font-size: 9px;
+        }
+        
+        .budget-item .value {
+            font-weight: bold;
+            color: #003366;
+            font-size: 12px;
+        }
+        
+        .variance-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .variance-badge.under {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .variance-badge.over {
+            background: #ffcccc;
+            color: #c62828;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #00A3E0;
+            box-shadow: 0 0 5px rgba(0,163,224,0.2);
+        }
+        
+        label {
+            display: block;
+            margin-top: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        
+        button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 3px 2px;
+        }
+        
+        .btn-target {
+            background: #00A3E0;
+            color: white;
+        }
+        
+        .btn-target:hover {
+            background: #0085B3;
+        }
+        
+        .btn-target.active {
+            background: #0085B3;
+            border: 2px solid #003366;
+        }
+        
+        .btn-interested {
+            background: #F58025;
+            color: white;
+        }
+        
+        .btn-interested:hover {
+            background: #E67500;
+        }
+        
+        .btn-interested.active {
+            background: #E67500;
+            border: 2px solid #003366;
+        }
+        
+        .btn-pass {
+            background: #ddd;
+            color: #333;
+        }
+        
+        .btn-pass:hover {
+            background: #ccc;
+        }
+        
+        .btn-pass.active {
+            background: #999;
+            color: white;
+            border: 2px solid #003366;
+        }
+        
+        .btn-action {
+            background: #003366;
+            color: white;
+            margin-top: 8px;
+            width: 100%;
+            padding: 10px;
+        }
+        
+        .btn-action:hover {
+            background: #1a4d7a;
+        }
+        
+        .btn-small {
+            width: auto;
+            padding: 6px 10px;
+            font-size: 11px;
+            margin: 2px;
+        }
+        
+        .player-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 8px;
+            max-height: 450px;
+            overflow-y: auto;
+        }
+        
+        .player-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 11px;
+        }
+        
+        .player-card:hover {
+            border-color: #00A3E0;
+            box-shadow: 0 2px 8px rgba(0,163,224,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .player-card.target {
+            border-color: #00A3E0;
+            background: #e8f4f8;
+            border-width: 3px;
+        }
+        
+        .player-card.interested {
+            border-color: #F58025;
+            background: #fef3e8;
+            border-width: 3px;
+        }
+        
+        .player-card.pass {
+            border-color: #999;
+            background: #f5f5f5;
+            opacity: 0.6;
+            border-width: 2px;
+        }
+        
+        .player-card.selected {
+            border-color: #00aa00;
+            background: #e8f5e9;
+            border-width: 3px;
+        }
+        
+        .player-name {
+            font-weight: bold;
+            color: #003366;
+            margin-bottom: 4px;
+        }
+        
+        .player-status-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3px;
+            margin-top: 6px;
+        }
+        
+        .player-status-buttons button {
+            padding: 3px 5px;
+            font-size: 9px;
+            margin: 0;
+        }
+        
+        .wishlist-item {
+            background: white;
+            border-left: 4px solid #00A3E0;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .wishlist-rank {
+            font-weight: bold;
+            color: #003366;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .wishlist-player {
+            flex: 1;
+        }
+        
+        .wishlist-player-name {
+            font-weight: bold;
+            color: #003366;
+        }
+        
+        .wishlist-remove {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        
+        .wishlist-remove:hover {
+            background: #ff5252;
+        }
+        
+        .draft-log {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            max-height: 350px;
+            overflow-y: auto;
+            font-size: 11px;
+        }
+        
+        .log-entry {
+            background: #f0f0f0;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border-left: 3px solid #00A3E0;
+        }
+        
+        .log-pick {
+            font-weight: bold;
+            color: #003366;
+        }
+        
+        .log-bonus {
+            color: #F58025;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+        
+        .search-box {
+            margin-bottom: 10px;
+        }
+        
+        .filter-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .filter-tab {
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 10px;
+            background: white;
+        }
+        
+        .filter-tab.active {
+            background: #00A3E0;
+            color: white;
+            border-color: #00A3E0;
+        }
+        
+        .scrollable {
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #00A3E0;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0085B3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🐢 Atlanta Braves 2026 Draft Dashboard</h1>
+            <div class="header-stats">
+                <div class="stat">
+                    <div class="stat-label">Total Pool</div>
+                    <div class="stat-value" id="totalPool">$15,870,800</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Pool Remaining</div>
+                    <div class="stat-value" id="poolRemaining">$15,870,800</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Total Spent</div>
+                    <div class="stat-value" id="totalSpent">$0</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Picks Remaining</div>
+                    <div class="stat-value" id="picksRemaining">3</div>
+                </div>
+            </div>
+            
+            <!-- Budget Variance Section -->
+            <div class="budget-variance">
+                <div class="variance-item">
+                    <div class="variance-label">Pick 9 Variance</div>
+                    <div class="variance-value" id="var9">$0</div>
+                </div>
+                <div class="variance-item">
+                    <div class="variance-label">Pick 26 Variance</div>
+                    <div class="variance-value" id="var26">$0</div>
+                </div>
+                <div class="variance-item">
+                    <div class="variance-label">Pick 48 Variance</div>
+                    <div class="variance-value" id="var48">$0</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Column 1: Picks & Budget -->
+            <div>
+                <!-- Pick 9 -->
+                <div class="section">
+                    <h2>📍 Pick 9 - Round 1</h2>
+                    <div class="pick-box">
+                        <div class="pick-title">Slot Value: $6,675,300</div>
+                        
+                        <label>Player Selected:</label>
+                        <input type="text" id="pick9Player" placeholder="Enter player name">
+                        
+                        <label>Signing Bonus Offer:</label>
+                        <input type="number" id="pick9Bonus" placeholder="Enter amount" step="100000">
+                        
+                        <div class="budget-bar">
+                            <div class="budget-used" id="pick9Bar" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="budget-info">
+                            <div class="budget-item">
+                                <label>Spent</label>
+                                <span class="value" id="pick9Spent">$0</span>
+                            </div>
+                            <div class="budget-item">
+                                <label>Remaining</label>
+                                <span class="value" id="pick9Remaining">$6.67M</span>
+                            </div>
+                            <div class="budget-item">
+                                <label>Variance</label>
+                                <span class="value" id="pick9Var">$0</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-action" onclick="recordPick(9)">💾 Save Pick 9</button>
+                        <button class="btn-action" style="background: #999; margin-top: 5px;" onclick="clearPick(9)">🗑️ Clear Pick 9</button>
+                    </div>
+                </div>
+                
+                <!-- Pick 26 -->
+                <div class="section" style="margin-top: 15px;">
+                    <h2>📍 Pick 26 - Prospect Promotion</h2>
+                    <div class="pick-box">
+                        <div class="pick-title">Slot Value: $3,578,800</div>
+                        
+                        <label>Player Selected:</label>
+                        <input type="text" id="pick26Player" placeholder="Enter player name">
+                        
+                        <label>Signing Bonus Offer:</label>
+                        <input type="number" id="pick26Bonus" placeholder="Enter amount" step="100000">
+                        
+                        <div class="budget-bar">
+                            <div class="budget-used" id="pick26Bar" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="budget-info">
+                            <div class="budget-item">
+                                <label>Spent</label>
+                                <span class="value" id="pick26Spent">$0</span>
+                            </div>
+                            <div class="budget-item">
+                                <label>Remaining</label>
+                                <span class="value" id="pick26Remaining">$3.58M</span>
+                            </div>
+                            <div class="budget-item">
+                                <label>Variance</label>
+                                <span class="value" id="pick26Var">$0</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-action" onclick="recordPick(26)">💾 Save Pick 26</button>
+                        <button class="btn-action" style="background: #999; margin-top: 5px;" onclick="clearPick(26)">🗑️ Clear Pick 26</button>
+                    </div>
+                </div>
+                
+                <!-- Pick 48 -->
+                <div class="section" style="margin-top: 15px;">
+                    <h2>📍 Pick 48 - Round 2</h2>
+                    <div class="pick-box">
+                        <div class="pick-title">Slot Value: $2,081,900</div>
+                        
+                        <label>Player Selected:</label>
+                        <input type="text" id="pick48Player" placeholder="Enter player name">
+                        
+                        <label>Signing Bonus Offer:</label>
+                        <input type="number" id="pick48Bonus" placeholder="Enter amount" step="100000">
+                        
+                        <div class="budget-bar">
+                            <div class="budget-used" id="pick48Bar" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="budget-info">
+                            <div class="budget-item">
+                                <label>Spent</label>
+                                <span class="value" id="pick48Spent">$0</span>
+                            </div>
+                            <div class="budget-item">
+                                <label>Remaining</label>
+                                <span class="value" id="pick48Remaining">$2.08M</span>
+                            </div>
+                            <div class="budget-item">
+                                <label>Variance</label>
+                                <span class="value" id="pick48Var">$0</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-action" onclick="recordPick(48)">💾 Save Pick 48</button>
+                        <button class="btn-action" style="background: #999; margin-top: 5px;" onclick="clearPick(48)">🗑️ Clear Pick 48</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Column 2: Wishlists for Each Pick -->
+            <div>
+                <!-- Pick 9 Wishlist -->
+                <div class="section">
+                    <h2>⭐ Pick 9 Wishlist</h2>
+                    <input type="text" id="pick9WishInput" placeholder="Type player name..." onkeypress="handleWishlistEnter(event, 9)">
+                    <button class="btn-target btn-small" style="width: 100%;" onclick="addToWishlist(9)">Add to Wishlist</button>
+                    <div id="pick9Wishlist" class="scrollable" style="margin-top: 10px; min-height: 120px;"></div>
+                </div>
+                
+                <!-- Pick 26 Wishlist -->
+                <div class="section" style="margin-top: 15px;">
+                    <h2>⭐ Pick 26 Wishlist</h2>
+                    <input type="text" id="pick26WishInput" placeholder="Type player name..." onkeypress="handleWishlistEnter(event, 26)">
+                    <button class="btn-target btn-small" style="width: 100%;" onclick="addToWishlist(26)">Add to Wishlist</button>
+                    <div id="pick26Wishlist" class="scrollable" style="margin-top: 10px; min-height: 120px;"></div>
+                </div>
+                
+                <!-- Pick 48 Wishlist -->
+                <div class="section" style="margin-top: 15px;">
+                    <h2>⭐ Pick 48 Wishlist</h2>
+                    <input type="text" id="pick48WishInput" placeholder="Type player name..." onkeypress="handleWishlistEnter(event, 48)">
+                    <button class="btn-target btn-small" style="width: 100%;" onclick="addToWishlist(48)">Add to Wishlist</button>
+                    <div id="pick48Wishlist" class="scrollable" style="margin-top: 10px; min-height: 120px;"></div>
+                </div>
+            </div>
+            
+            <!-- Column 3: Players Pool & Log -->
+            <div>
+                <!-- Available Players -->
+                <div class="section">
+                    <h2>👥 Available Players</h2>
+                    
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search player..." onkeyup="filterPlayers()">
+                    </div>
+                    
+                    <div class="filter-tabs">
+                        <div class="filter-tab active" onclick="filterByStatus('all')">All</div>
+                        <div class="filter-tab" onclick="filterByStatus('target')">🎯 Target</div>
+                        <div class="filter-tab" onclick="filterByStatus('interested')">⭐ Interested</div>
+                        <div class="filter-tab" onclick="filterByStatus('pass')">✕ Pass</div>
+                    </div>
+                    
+                    <div id="playerList" class="player-list scrollable" style="max-height: 320px;">
+                        <!-- Players will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Draft Log -->
+                <div class="section" style="margin-top: 15px;">
+                    <h2>📋 Draft Log</h2>
+                    <div id="draftLog" class="draft-log">
+                        <p style="color: #999; text-align: center; padding: 20px;">No picks recorded yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Player pool
+        const allPlayers = [
+            'Jackson Flora', 'Justin Lebron', 'Ryder Helfrick', 'Hunter Dietz', 'Tegan Kuhns',
+            'Landon Thome', 'Kaden Waechter', 'Jarren Advincula', 'Jacob Lombard', 'Cameron Flukey',
+            'Tyler Bell', 'Ligan Schmidt', 'Caden Sorrell', 'Daniel Jackson', 'Logan Hughes',
+            'Drew Burress', 'Chris Hacopian', 'Eric Becker', 'Mason Edwards', 'Aiden Ruiz',
+            'Blake Bowen', 'Will Brick', 'Wes Mendes', 'Eric Booth Jr', 'Gio Rojas',
+            'Brody Bumila', 'Coleman Borthwick', 'Zion Rose', 'Jack Radel', 'Ben Blair'
+        ];
+
+        // Data structure
+        let playerData = {};
+        let draftLog = [];
+        let currentFilter = 'all';
+        let wishlists = { 9: [], 26: [], 48: [] };
+
+        const slotValues = {
+            9: 6675300,
+            26: 3578800,
+            48: 2081900
+        };
+
+        const totalPool = 15870800;
+
+        // Initialize
+        function init() {
+            allPlayers.forEach(player => {
+                playerData[player] = {
+                    status: 'neutral', // target, interested, pass
+                    notes: '',
+                    picked: false
+                };
+            });
+            renderPlayers();
+        }
+
+        // Render player list with working buttons
+        function renderPlayers() {
+            const list = document.getElementById('playerList');
+            let filtered = allPlayers.filter(player => {
+                const matchesSearch = player.toLowerCase().includes(
+                    document.getElementById('searchInput').value.toLowerCase()
+                );
+                const matchesFilter = currentFilter === 'all' || playerData[player].status === currentFilter;
+                return matchesSearch && matchesFilter && !playerData[player].picked;
+            });
+
+            list.innerHTML = filtered.map(player => `
+                <div class="player-card ${playerData[player].status}">
+                    <div class="player-name">${player}</div>
+                    <div class="player-status-buttons">
+                        <button class="btn-target btn-small ${playerData[player].status === 'target' ? 'active' : ''}" 
+                                onclick="setPlayerStatus('${player}', 'target')">🎯</button>
+                        <button class="btn-interested btn-small ${playerData[player].status === 'interested' ? 'active' : ''}" 
+                                onclick="setPlayerStatus('${player}', 'interested')">⭐</button>
+                        <button class="btn-pass btn-small ${playerData[player].status === 'pass' ? 'active' : ''}" 
+                                onclick="setPlayerStatus('${player}', 'pass')">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Set player status with WORKING buttons
+        function setPlayerStatus(player, status) {
+            if (playerData[player].status === status) {
+                playerData[player].status = 'neutral';
+            } else {
+                playerData[player].status = status;
+            }
+            renderPlayers();
+        }
+
+        // Filter players by status
+        function filterByStatus(status) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            renderPlayers();
+        }
+
+        // Filter players search
+        function filterPlayers() {
+            renderPlayers();
+        }
+
+        // Wishlist functions
+        function addToWishlist(pick) {
+            const input = document.getElementById(`pick${pick}WishInput`);
+            const player = input.value.trim();
+
+            if (!player) {
+                alert('Enter a player name');
+                return;
+            }
+
+            if (wishlists[pick].includes(player)) {
+                alert('Player already in wishlist for this pick');
+                return;
+            }
+
+            wishlists[pick].push(player);
+            input.value = '';
+            renderWishlists();
+        }
+
+        function removeFromWishlist(pick, player) {
+            wishlists[pick] = wishlists[pick].filter(p => p !== player);
+            renderWishlists();
+        }
+
+        function handleWishlistEnter(event, pick) {
+            if (event.key === 'Enter') {
+                addToWishlist(pick);
+            }
+        }
+
+        function renderWishlists() {
+            [9, 26, 48].forEach(pick => {
+                const wishlist = document.getElementById(`pick${pick}Wishlist`);
+                if (wishlists[pick].length === 0) {
+                    wishlist.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No players ranked yet</p>';
+                    return;
+                }
+
+                wishlist.innerHTML = wishlists[pick].map((player, index) => `
+                    <div class="wishlist-item">
+                        <span class="wishlist-rank">#${index + 1}</span>
+                        <div class="wishlist-player">
+                            <div class="wishlist-player-name">${player}</div>
+                        </div>
+                        <button class="wishlist-remove" onclick="removeFromWishlist(${pick}, '${player}')">Remove</button>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // Record pick
+        function recordPick(pick) {
+            const playerInput = document.getElementById(`pick${pick}Player`);
+            const bonusInput = document.getElementById(`pick${pick}Bonus`);
+            
+            const player = playerInput.value.trim();
+            const bonus = parseInt(bonusInput.value) || 0;
+
+            if (!player) {
+                alert(`Please enter a player name for Pick ${pick}`);
+                return;
+            }
+
+            if (bonus === 0) {
+                alert(`Please enter a signing bonus for Pick ${pick}`);
+                return;
+            }
+
+            // Mark player as picked
+            if (playerData[player]) {
+                playerData[player].picked = true;
+            }
+
+            // Add to draft log
+            draftLog.push({ pick, player, bonus });
+
+            // Update UI
+            renderPlayers();
+            updateBudget();
+            updateDraftLog();
+
+            // Clear inputs
+            playerInput.value = '';
+            bonusInput.value = '';
+        }
+
+        // Clear pick
+        function clearPick(pick) {
+            const entry = draftLog.find(e => e.pick === pick);
+            if (entry) {
+                if (playerData[entry.player]) {
+                    playerData[entry.player].picked = false;
+                }
+                draftLog = draftLog.filter(e => e.pick !== pick);
+            }
+
+            document.getElementById(`pick${pick}Player`).value = '';
+            document.getElementById(`pick${pick}Bonus`).value = '';
+
+            renderPlayers();
+            updateBudget();
+            updateDraftLog();
+        }
+
+        // Update budget tracking
+        function updateBudget() {
+            const pick9 = draftLog.find(e => e.pick === 9);
+            const pick26 = draftLog.find(e => e.pick === 26);
+            const pick48 = draftLog.find(e => e.pick === 48);
+
+            let totalSpent = 0;
+
+            // Update Pick 9
+            const spend9 = pick9 ? pick9.bonus : 0;
+            totalSpent += spend9;
+            updatePickDisplay(9, slotValues[9], spend9);
+
+            // Update Pick 26
+            const spend26 = pick26 ? pick26.bonus : 0;
+            totalSpent += spend26;
+            updatePickDisplay(26, slotValues[26], spend26);
+
+            // Update Pick 48
+            const spend48 = pick48 ? pick48.bonus : 0;
+            totalSpent += spend48;
+            updatePickDisplay(48, slotValues[48], spend48);
+
+            // Update header
+            document.getElementById('totalSpent').textContent = formatCurrency(totalSpent);
+            document.getElementById('poolRemaining').textContent = formatCurrency(totalPool - totalSpent);
+            document.getElementById('picksRemaining').textContent = (3 - draftLog.length);
+
+            // Update variance indicators
+            updateVarianceDisplay();
+        }
+
+        function updatePickDisplay(pick, slot, spent) {
+            const pct = (spent / slot) * 100;
+            const bar = document.getElementById(`pick${pick}Bar`);
+            bar.style.width = Math.min(pct, 100) + '%';
+            bar.textContent = pct > 15 ? formatCurrency(spent) : '';
+            
+            document.getElementById(`pick${pick}Spent`).textContent = formatCurrency(spent);
+            document.getElementById(`pick${pick}Remaining`).textContent = formatCurrency(slot - spent);
+            
+            const variance = spent - slot;
+            const varianceEl = document.getElementById(`pick${pick}Var`);
+            varianceEl.textContent = variance === 0 ? '$0' : formatCurrency(Math.abs(variance));
+            varianceEl.className = 'value ' + (variance < 0 ? 'variance-positive' : variance > 0 ? 'variance-negative' : '');
+        }
+
+        function updateVarianceDisplay() {
+            const pick9 = draftLog.find(e => e.pick === 9);
+            const pick26 = draftLog.find(e => e.pick === 26);
+            const pick48 = draftLog.find(e => e.pick === 48);
+
+            const var9 = pick9 ? pick9.bonus - slotValues[9] : 0;
+            const var26 = pick26 ? pick26.bonus - slotValues[26] : 0;
+            const var48 = pick48 ? pick48.bonus - slotValues[48] : 0;
+
+            updateVarianceBadge('var9', var9);
+            updateVarianceBadge('var26', var26);
+            updateVarianceBadge('var48', var48);
+        }
+
+        function updateVarianceBadge(id, variance) {
+            const el = document.getElementById(id);
+            el.textContent = variance === 0 ? '$0' : (variance < 0 ? '💰 ' : '⚠️ ') + formatCurrency(Math.abs(variance));
+            el.className = 'variance-value ' + (variance < 0 ? 'variance-positive' : variance > 0 ? 'variance-negative' : '');
+        }
+
+        function updateDraftLog() {
+            const log = document.getElementById('draftLog');
+            if (draftLog.length === 0) {
+                log.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No picks recorded yet</p>';
+                return;
+            }
+
+            log.innerHTML = draftLog.map(entry => {
+                const slot = slotValues[entry.pick];
+                const variance = entry.bonus - slot;
+                return `
+                    <div class="log-entry">
+                        <div class="log-pick">Pick ${entry.pick}: ${entry.player}</div>
+                        <div class="log-bonus">💰 ${formatCurrency(entry.bonus)} ${variance !== 0 ? (variance < 0 ? '(💰 ' + formatCurrency(Math.abs(variance)) + ' under)' : '(⚠️ ' + formatCurrency(variance) + ' over)') : '(at slot)'}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatCurrency(value) {
+            if (value === 0) return '$0';
+            if (value >= 1000000) {
+                return '$' + (value / 1000000).toFixed(2) + 'M';
+            }
+            return '$' + value.toLocaleString();
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            init();
+            renderWishlists();
+        };
+    </script>
+</body>
+</html>
